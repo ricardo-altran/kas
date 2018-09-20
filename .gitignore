@@ -15,3 +15,4 @@ xtend-gen
 classes
 .DS_STORE
 .metadata
+.mvn
