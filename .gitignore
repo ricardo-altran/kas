@@ -1,0 +1,17 @@
+*.iml
+*.class
+**/target
+bin/
+dist
+**/logs
+*~
+target
+target-ide
+.classpath
+.project
+.settings
+.idea
+xtend-gen
+classes
+.DS_STORE
+.metadata
