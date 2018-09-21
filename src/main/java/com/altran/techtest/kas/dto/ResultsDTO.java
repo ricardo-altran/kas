@@ -17,4 +17,36 @@ public class ResultsDTO {
     public ResultsDTO() {
 
     }
+
+    public MultiLanguageDTO getNotesTranslated() {
+        return notesTranslated;
+    }
+
+    public void setNotesTranslated(MultiLanguageDTO notesTranslated) {
+        this.notesTranslated = notesTranslated;
+    }
+
+    public String getGeolocalization() {
+        return geolocalization;
+    }
+
+    public void setGeolocalization(String geolocalization) {
+        this.geolocalization = geolocalization;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public MultiLanguageDTO getUrlTornada() {
+        return urlTornada;
+    }
+
+    public void setUrlTornada(MultiLanguageDTO urlTornada) {
+        this.urlTornada = urlTornada;
+    }
 }

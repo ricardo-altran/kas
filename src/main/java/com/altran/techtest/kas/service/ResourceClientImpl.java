@@ -1,5 +1,6 @@
 package com.altran.techtest.kas.service;
 
+import com.altran.techtest.kas.dto.SolrMessageDTO;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -18,11 +19,11 @@ public class ResourceClientImpl implements IResourceClient {
     private static final int ROWS_PARAMETER = 5;
 
     @Override
-    public String getResourceData() {
+    public SolrMessageDTO getResourceData() {
         HttpHeaders httpHeaders = new HttpHeaders();
         HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
         RestTemplate restTemplate = new RestTemplate();
         return (restTemplate.exchange(RESOURCE_URI + QUERY_SEPARATOR + START + START_PARAMETER
-                + QUERY_AND + ROWS + ROWS_PARAMETER, HttpMethod.POST, entity, String.class).getBody());
+                + QUERY_AND + ROWS + ROWS_PARAMETER, HttpMethod.GET, entity, SolrMessageDTO.class).getBody());
     }
 }
