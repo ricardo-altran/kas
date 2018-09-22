@@ -43,6 +43,34 @@ public class ResultsDTO {
     private String creatorUserId;
     private String type;
     private List<ResourceDTO> resources;
+    @JsonProperty("num_resources")
+    private int numResources;
+    private List<TagDTO> tags;
+    @JsonProperty("fecha_publicacion")
+    private String fechaPublicacion;
+    @JsonProperty("load_type")
+    private String loadType;
+    private List<GroupDTO> groups;
+    @JsonProperty("license_id")
+    private String licenseId;
+    @JsonProperty("license_title")
+    private String licenseTitle;
+    private OrganizationDTO organization;
+    private String name;
+    private String url;
+    private String notes;
+    @JsonProperty("owner_org")
+    private String ownerOrg;
+    private String tag;
+    @JsonProperty("license_url")
+    private String licenseUrl;
+    private String historical;
+    private String title;
+    @JsonProperty("revision_id")
+    private String revisionId;
+    @JsonProperty("date_deactivation_informed")
+    private String dateDeactivationInformed;
+    private List<ExtraDTO> extras;
 
     public ResultsDTO() {
 
@@ -238,5 +266,157 @@ public class ResultsDTO {
 
     public void setResources(List<ResourceDTO> resources) {
         this.resources = resources;
+    }
+
+    public int getNumResources() {
+        return numResources;
+    }
+
+    public void setNumResources(int numResources) {
+        this.numResources = numResources;
+    }
+
+    public List<TagDTO> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<TagDTO> tags) {
+        this.tags = tags;
+    }
+
+    public String getFechaPublicacion() {
+        return fechaPublicacion;
+    }
+
+    public void setFechaPublicacion(String fechaPublicacion) {
+        this.fechaPublicacion = fechaPublicacion;
+    }
+
+    public String getLoadType() {
+        return loadType;
+    }
+
+    public void setLoadType(String loadType) {
+        this.loadType = loadType;
+    }
+
+    public String getLicenseId() {
+        return licenseId;
+    }
+
+    public void setLicenseId(String licenseId) {
+        this.licenseId = licenseId;
+    }
+
+    public String getLicenseTitle() {
+        return licenseTitle;
+    }
+
+    public void setLicenseTitle(String licenseTitle) {
+        this.licenseTitle = licenseTitle;
+    }
+
+    public OrganizationDTO getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(OrganizationDTO organization) {
+        this.organization = organization;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public String getOwnerOrg() {
+        return ownerOrg;
+    }
+
+    public void setOwnerOrg(String ownerOrg) {
+        this.ownerOrg = ownerOrg;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public String getLicenseUrl() {
+        return licenseUrl;
+    }
+
+    public void setLicenseUrl(String licenseUrl) {
+        this.licenseUrl = licenseUrl;
+    }
+
+    public String getHistorical() {
+        return historical;
+    }
+
+    public void setHistorical(String historical) {
+        this.historical = historical;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getRevisionId() {
+        return revisionId;
+    }
+
+    public void setRevisionId(String revisionId) {
+        this.revisionId = revisionId;
+    }
+
+    public String getDateDeactivationInformed() {
+        return dateDeactivationInformed;
+    }
+
+    public void setDateDeactivationInformed(String dateDeactivationInformed) {
+        this.dateDeactivationInformed = dateDeactivationInformed;
+    }
+
+    public List<ExtraDTO> getExtras() {
+        return extras;
+    }
+
+    public void setExtras(List<ExtraDTO> extras) {
+        this.extras = extras;
+    }
+
+    public List<GroupDTO> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<GroupDTO> groups) {
+        this.groups = groups;
     }
 }
