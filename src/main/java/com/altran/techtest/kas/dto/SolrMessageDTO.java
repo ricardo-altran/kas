@@ -8,6 +8,7 @@ public class SolrMessageDTO {
     private String help;
     private boolean success;
     private ResultDTO result;
+    // "facets" is a deprecated feature according to Solr help docu; so we skip it
 
     public SolrMessageDTO() {
 

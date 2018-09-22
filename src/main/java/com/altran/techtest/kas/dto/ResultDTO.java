@@ -9,7 +9,7 @@ import java.util.List;
 public class ResultDTO {
     private int count;
     private String sort;
-//    private FacetDTO facets;
+    // "facets" is deprecated according to Solr help documentation.
     private List<ResultsDTO> results;
 
     public ResultDTO() {
