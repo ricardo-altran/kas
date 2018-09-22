@@ -8,7 +8,7 @@ import java.util.List;
  * Data Transfer Object for describing an object from the list of
  * results received.
  */
-public class ResultsDTO {
+public class ItemDTO {
     @JsonProperty("notes_translated")
     private MultiLanguageDTO notesTranslated;
     private String geolocation;
@@ -72,7 +72,7 @@ public class ResultsDTO {
     private String dateDeactivationInformed;
     private List<ExtraDTO> extras;
 
-    public ResultsDTO() {
+    public ItemDTO() {
 
     }
 

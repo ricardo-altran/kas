@@ -10,7 +10,7 @@ public class ResultDTO {
     private int count;
     private String sort;
     // "facets" is deprecated according to Solr help documentation.
-    private List<ResultsDTO> results;
+    private List<ItemDTO> results;
 
     public ResultDTO() {
 
@@ -32,11 +32,11 @@ public class ResultDTO {
         this.sort = sort;
     }
 
-    public List<ResultsDTO> getResults() {
+    public List<ItemDTO> getResults() {
         return results;
     }
 
-    public void setResults(List<ResultsDTO> results) {
+    public void setResults(List<ItemDTO> results) {
         this.results = results;
     }
 }
