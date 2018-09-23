@@ -16,21 +16,22 @@ public class ResourceClientImpl implements IResourceClient {
     private static final String START = "start";
     private static final String ROWS = "rows";
     private static final String QUERY_FILTER = "fq";
-    private static final int ROWS_VALUE = 10;
-    private static final int MAX_ROWS_VALUE = 1000;
-    private static final int START_VALUE = 0;
 
-    private final WebClient webClient = WebClient.builder()
-            .baseUrl(BASE_URL)
-            .defaultHeader(HttpHeaders.CONTENT_TYPE, HEADER_CONTENT_TYPE_JSON)
-            .build();
+    private final WebClient webClient;
+
+    public ResourceClientImpl() {
+        this.webClient = WebClient.builder()
+                .baseUrl(BASE_URL)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, HEADER_CONTENT_TYPE_JSON)
+                .build();
+    }
 
     @Override
-    public List<ItemDTO> getAllResultsFromResource() {
+    public List<ItemDTO> getAllResultsFromResource(Integer page, Integer rows) {
         SolrMessageDTO solrMessageDTO =  this.webClient.get()
                 .uri(uriBuilder -> uriBuilder.path(RESOURCE_URI)
-                        .queryParam(START, START_VALUE)
-                        .queryParam(ROWS, ROWS_VALUE)
+                        .queryParam(START, page * rows)
+                        .queryParam(ROWS, rows)
                         .build())
                 .retrieve()
                 .bodyToMono(SolrMessageDTO.class)

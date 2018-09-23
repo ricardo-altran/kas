@@ -22,6 +22,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @RunWith(SpringRunner.class)
 @WebMvcTest(ResourceReaderController.class)
 public class ResourceReaderControllerTest {
+    private static final Integer PAGE = 0;
+    private static final Integer ROWS = 10;
+
     @Autowired
     private MockMvc mvc;
 
@@ -40,7 +43,7 @@ public class ResourceReaderControllerTest {
         solrMessageDTO.setSuccess(true);
         solrMessageDTO.setResult(resultDTO);
 
-        given(resourceReaderServiceMock.getAllResultsFromResource()).willReturn(itemDTOList);
+        given(resourceReaderServiceMock.getAllResultsFromResource(PAGE, ROWS)).willReturn(itemDTOList);
 
         mvc.perform(get("/results")
                 .contentType(MediaType.APPLICATION_JSON));

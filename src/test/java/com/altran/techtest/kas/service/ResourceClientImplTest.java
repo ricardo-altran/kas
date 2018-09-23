@@ -9,6 +9,9 @@ import java.util.List;
 import static org.junit.Assert.assertNotNull;
 
 public class ResourceClientImplTest {
+    private static final Integer PAGE = 0;
+    private static final Integer ROWS = 10;
+
     private IResourceClient resourceClient;
 
     @Before
@@ -18,7 +21,7 @@ public class ResourceClientImplTest {
 
     @Test
     public void whenReadingFromResourceThenNotNullResponse() throws Exception {
-        List<ItemDTO> itemDTOList = this.resourceClient.getAllResultsFromResource();
+        List<ItemDTO> itemDTOList = this.resourceClient.getAllResultsFromResource(PAGE, ROWS);
         assertNotNull(itemDTOList);
     }
 

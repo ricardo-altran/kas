@@ -10,6 +10,6 @@ import java.util.List;
  */
 public interface IResourceClient {
 
-    List<ItemDTO> getAllResultsFromResource();
+    List<ItemDTO> getAllResultsFromResource(Integer page, Integer rows);
     ItemDTO getResultFromResourceById(String id);
 }

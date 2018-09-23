@@ -5,6 +5,7 @@ import com.altran.techtest.kas.service.IResourceClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -20,8 +21,10 @@ public class ResourceReaderController {
      * @return Data Transfer Object which depicts the list of {@link ItemDTO}.
      */
     @GetMapping("/result")
-    public List<ItemDTO> getAllResultsFromResource() {
-        return resourceReaderService.getAllResultsFromResource();
+    public List<ItemDTO> getAllResultsFromResource(
+            @RequestParam(defaultValue = "0", required = false) Integer page,
+            @RequestParam(defaultValue = "10", required = false) Integer rows) {
+        return resourceReaderService.getAllResultsFromResource(page, rows);
     }
 
     /**
