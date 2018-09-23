@@ -1,6 +1,8 @@
 package com.altran.techtest.kas.service;
 
-import com.altran.techtest.kas.dto.SolrMessageDTO;
+import com.altran.techtest.kas.dto.ItemDTO;
+
+import java.util.List;
 
 /**
  * This interface defines the service for gathering information
@@ -8,5 +10,6 @@ import com.altran.techtest.kas.dto.SolrMessageDTO;
  */
 public interface IResourceClient {
 
-    SolrMessageDTO getResourceData();
+    List<ItemDTO> getAllResultsFromResource();
+    ItemDTO getResultFromResourceById(String id);
 }

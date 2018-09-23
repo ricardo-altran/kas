@@ -1,11 +1,12 @@
 package com.altran.techtest.kas.service;
 
-import com.altran.techtest.kas.dto.SolrMessageDTO;
+import com.altran.techtest.kas.dto.ItemDTO;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 public class ResourceClientImplTest {
     private IResourceClient resourceClient;
@@ -17,10 +18,8 @@ public class ResourceClientImplTest {
 
     @Test
     public void whenReadingFromResourceThenNotNullResponse() throws Exception {
-        SolrMessageDTO response = this.resourceClient.getResourceData();
-        assertTrue(response.isSuccess());
-        assertNotNull(response.getHelp());
-        assertNotNull(response.getResult());
+        List<ItemDTO> itemDTOList = this.resourceClient.getAllResultsFromResource();
+        assertNotNull(itemDTOList);
     }
 
 }
