@@ -32,8 +32,8 @@ public class ResourceClientImpl implements IResourceClient {
                         .queryParam(START, page * rows)
                         .queryParam(ROWS, rows)
                         .build())
-                .exchange()
-                .flatMapMany(clientResponse -> clientResponse.bodyToFlux(SolrMessageDTO.class));
+                .retrieve()
+                .bodyToFlux(SolrMessageDTO.class);
     }
 
     @Override
