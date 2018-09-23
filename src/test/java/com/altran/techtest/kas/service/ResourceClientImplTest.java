@@ -1,10 +1,9 @@
 package com.altran.techtest.kas.service;
 
-import com.altran.techtest.kas.dto.ItemDTO;
+import com.altran.techtest.kas.dto.SolrMessageDTO;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -21,8 +20,8 @@ public class ResourceClientImplTest {
 
     @Test
     public void whenReadingFromResourceThenNotNullResponse() throws Exception {
-        List<ItemDTO> itemDTOList = this.resourceClient.getAllResultsFromResource(PAGE, ROWS);
-        assertNotNull(itemDTOList);
+        Flux<SolrMessageDTO> solrMessage = this.resourceClient.getAllResultsFromResource(PAGE, ROWS);
+        assertNotNull(solrMessage);
     }
 
 }
