@@ -7,8 +7,11 @@ import org.junit.Test;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class ResourceClientImplTest {
     private static final Integer PAGE = 0;
@@ -26,6 +29,8 @@ public class ResourceClientImplTest {
     public void whenReadingFromResourceThenNotNullResponse() throws Exception {
         Flux<SolrMessageDTO> solrMessage = this.resourceClient.getAllResultsFromResource(PAGE, ROWS);
         assertEquals(solrMessage.blockFirst().isSuccess(), true);
+        List<ItemDTO> listResults = solrMessage.blockFirst().getResult().getResults();
+        assertTrue(listResults.size() == ROWS);
     }
 
     @Test
@@ -36,4 +41,11 @@ public class ResourceClientImplTest {
         assertEquals(expectedResult.getId(), ID);
     }
 
+    @Test
+    public void whenReadingFromResourceByIdThenNoMatches() throws Exception {
+        Mono<SolrMessageDTO> solrMessage = this.resourceClient.getResultFromResourceById("madeUpValue");
+        assertNotNull(solrMessage.block());
+        List<ItemDTO> expectedResult = solrMessage.block().getResult().getResults();
+        assertTrue(expectedResult.isEmpty());
+    }
 }

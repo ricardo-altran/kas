@@ -41,4 +41,26 @@ public class ResourceReaderControllerTest {
                         Assertions.assertThat(response.getResponseBody()).isNotNull());
     }
 
+    @Test
+    public void whenGetSingleResourceByIdThenRecieveExpectedId() {
+        webTestClient.get()
+                .uri("/kasapi/result/{id}", "cb293930-f483-4457-bf57-50a68e9b01b3")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.success").isEqualTo(true)
+                .jsonPath("$.result.results[0].id").isEqualTo("cb293930-f483-4457-bf57-50a68e9b01b3");
+    }
+
+    @Test
+    public void whenGetSingleResourceByIdThenNotSuchId() {
+        webTestClient.get()
+                .uri("/kasapi/result/{id}", "madeUpId")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.success").isEqualTo(true)
+                .jsonPath("$.result.results").isEmpty();
+    }
+
 }
