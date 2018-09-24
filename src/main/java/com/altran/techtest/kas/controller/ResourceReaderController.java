@@ -47,4 +47,15 @@ public class ResourceReaderController {
     public Mono<SolrMessageDTO> getResultFromResourceByName(@PathVariable String name) {
         return resourceReaderService.getResultFromResourceByName(name);
     }
+
+    /**
+     * Function to return an specific list of {@link ItemDTO} stored in
+     * the remote API resource.
+     * @param query which is the match expression to look for at DataSet.
+     * @return Data Transfer Object which depicts the specific list of {@link ItemDTO}.
+     */
+    @GetMapping("/result/query/{query}")
+    public Flux<SolrMessageDTO> getResultsThatMatchTheQuery(@PathVariable String query) {
+        return resourceReaderService.getAllResultsThatMatchTheQuery(query);
+    }
 }

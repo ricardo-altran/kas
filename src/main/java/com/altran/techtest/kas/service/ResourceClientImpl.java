@@ -76,4 +76,18 @@ public class ResourceClientImpl implements IResourceClient {
         return solrMessageDTOMono;
     }
 
+    @Override
+    public Flux<SolrMessageDTO> getAllResultsThatMatchTheQuery(String query) {
+        return this.webClient.get()
+                .uri(uriBuilder -> uriBuilder.path(RESOURCE_URI)
+                        .queryParam(QUERY_FILTER, query)
+                        .build())
+                .retrieve()
+                .onStatus(HttpStatus::is4xxClientError, clientResponse ->
+                        Mono.error(new KasClientException()))
+                .onStatus(HttpStatus::is5xxServerError, clientResponse ->
+                        Mono.error(new KasServerException()))
+                .bodyToFlux(SolrMessageDTO.class);
+    }
+
 }

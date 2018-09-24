@@ -91,4 +91,14 @@ public class ResourceReaderControllerTest {
                 .expectStatus().isNotFound();
     }
 
+    @Test
+    public void whenGetAllResourcesThatMatchAQueryThenReceiveSolrMessage() {
+        webTestClient.get().uri("/kasapi/result/query/{query}", "frequency:ANUAL")
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectBodyList(SolrMessageDTO.class);
+    }
+
 }
