@@ -1,52 +1,63 @@
 package com.altran.techtest.kas.controller;
 
-import com.altran.techtest.kas.dto.ItemDTO;
-import com.altran.techtest.kas.dto.ResultDTO;
 import com.altran.techtest.kas.dto.SolrMessageDTO;
-import com.altran.techtest.kas.service.IResourceClient;
+import org.assertj.core.api.Assertions;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(ResourceReaderController.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ResourceReaderControllerTest {
-    private static final Integer PAGE = 0;
-    private static final Integer ROWS = 10;
 
     @Autowired
-    private MockMvc mvc;
-
-    @MockBean
-    private IResourceClient resourceReaderServiceMock;
+    private WebTestClient webTestClient;
 
     @Test
-    public void whenGetDataFromResouceThenReturnListOfResults() throws Exception {
-        SolrMessageDTO solrMessageDTO = new SolrMessageDTO();
-        ResultDTO resultDTO = new ResultDTO();
-        ItemDTO itemDTO = new ItemDTO();
-        itemDTO.setId("testItemResult");
-        List<ItemDTO> itemDTOList = new ArrayList<>();
-        itemDTOList.add(itemDTO);
-        resultDTO.setResults(itemDTOList);
-        solrMessageDTO.setSuccess(true);
-        solrMessageDTO.setResult(resultDTO);
+    public void whenGetAllResourcesWithoutSpecifyingPageAndRowsThenReceiveSolrMessage() {
+        webTestClient.get().uri("/kasapi/result")
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+                .expectBodyList(SolrMessageDTO.class);
+    }
 
-        given(resourceReaderServiceMock.getAllResultsFromResource(PAGE, ROWS)).willReturn(itemDTOList);
+    @Test
+    public void whenGetSingleResourceByIdThenRecieveNotNull() {
+        webTestClient.get()
+                .uri("/kasapi/result/{id}", "cb293930-f483-4457-bf57-50a68e9b01b3")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .consumeWith(response ->
+                        Assertions.assertThat(response.getResponseBody()).isNotNull());
+    }
 
-        mvc.perform(get("/results")
-                .contentType(MediaType.APPLICATION_JSON));
+    @Test
+    public void whenGetSingleResourceByIdThenRecieveExpectedId() {
+        webTestClient.get()
+                .uri("/kasapi/result/{id}", "cb293930-f483-4457-bf57-50a68e9b01b3")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$.success").isEqualTo(true)
+                .jsonPath("$.result.results[0].id").isEqualTo("cb293930-f483-4457-bf57-50a68e9b01b3");
+    }
+
+    @Test
+    public void whenGetSingleResourceByIdThenNotSuchId() {
+        webTestClient.get()
+                .uri("/kasapi/result/{id}", "madeUpId")
+                .exchange()
+                .expectStatus().isNotFound();
     }
 
 }

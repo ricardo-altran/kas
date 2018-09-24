@@ -1,8 +1,8 @@
 package com.altran.techtest.kas.service;
 
-import com.altran.techtest.kas.dto.ItemDTO;
-
-import java.util.List;
+import com.altran.techtest.kas.dto.SolrMessageDTO;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  * This interface defines the service for gathering information
@@ -10,6 +10,6 @@ import java.util.List;
  */
 public interface IResourceClient {
 
-    List<ItemDTO> getAllResultsFromResource(Integer page, Integer rows);
-    ItemDTO getResultFromResourceById(String id);
+    Flux<SolrMessageDTO> getAllResultsFromResource(Integer page, Integer rows);
+    Mono<SolrMessageDTO> getResultFromResourceById(String id);
 }

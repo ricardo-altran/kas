@@ -1,12 +1,15 @@
 package com.altran.techtest.kas.service;
 
-import com.altran.techtest.kas.dto.ItemDTO;
 import com.altran.techtest.kas.dto.SolrMessageDTO;
+import com.altran.techtest.kas.exception.KasClientException;
+import com.altran.techtest.kas.exception.KasServerException;
+import com.altran.techtest.kas.exception.KasNoSuchItem;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service("resourceReaderService")
 public class ResourceClientImpl implements IResourceClient {
@@ -27,29 +30,35 @@ public class ResourceClientImpl implements IResourceClient {
     }
 
     @Override
-    public List<ItemDTO> getAllResultsFromResource(Integer page, Integer rows) {
-        SolrMessageDTO solrMessageDTO =  this.webClient.get()
+    public Flux<SolrMessageDTO> getAllResultsFromResource(Integer page, Integer rows) {
+        return this.webClient.get()
                 .uri(uriBuilder -> uriBuilder.path(RESOURCE_URI)
                         .queryParam(START, page * rows)
                         .queryParam(ROWS, rows)
                         .build())
                 .retrieve()
-                .bodyToMono(SolrMessageDTO.class)
-                .block();
-        return solrMessageDTO.getResult().getResults();
+                .onStatus(HttpStatus::is4xxClientError, clientResponse ->
+                        Mono.error(new KasClientException()))
+                .onStatus(HttpStatus::is5xxServerError, clientResponse ->
+                        Mono.error(new KasServerException()))
+                .bodyToFlux(SolrMessageDTO.class);
     }
 
     @Override
-    public ItemDTO getResultFromResourceById(String id) {
-        SolrMessageDTO solrMessageDTO = this.webClient.get()
+    public Mono<SolrMessageDTO> getResultFromResourceById(String id) {
+        Mono<SolrMessageDTO> solrMessageDTOMono = this.webClient.get()
                 .uri(uriBuilder -> uriBuilder.path(RESOURCE_URI)
                         .queryParam(QUERY_FILTER, "id:" + id)
                         .build())
                 .retrieve()
-                .bodyToMono(SolrMessageDTO.class)
-                .block();
-        // TODO: Exception should not be two records with the same ID
-        return solrMessageDTO.getResult().getResults().get(0);
+                .onStatus(HttpStatus::is4xxClientError, clientResponse ->
+                        Mono.error(new KasClientException()))
+                .onStatus(HttpStatus::is5xxServerError, clientResponse ->
+                        Mono.error(new KasServerException()))
+                .bodyToMono(SolrMessageDTO.class);
+        if(solrMessageDTOMono.block().getResult().getCount() == 0)
+            throw new KasNoSuchItem();
+        return solrMessageDTOMono;
     }
 
 }

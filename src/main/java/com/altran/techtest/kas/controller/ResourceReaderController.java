@@ -1,16 +1,15 @@
 package com.altran.techtest.kas.controller;
 
 import com.altran.techtest.kas.dto.ItemDTO;
+import com.altran.techtest.kas.dto.SolrMessageDTO;
 import com.altran.techtest.kas.service.IResourceClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
+@RequestMapping("/kasapi")
 public class ResourceReaderController {
     @Autowired
     private IResourceClient resourceReaderService;
@@ -21,7 +20,7 @@ public class ResourceReaderController {
      * @return Data Transfer Object which depicts the list of {@link ItemDTO}.
      */
     @GetMapping("/result")
-    public List<ItemDTO> getAllResultsFromResource(
+    public Flux<SolrMessageDTO> getAllResultsFromResource(
             @RequestParam(defaultValue = "0", required = false) Integer page,
             @RequestParam(defaultValue = "10", required = false) Integer rows) {
         return resourceReaderService.getAllResultsFromResource(page, rows);
@@ -34,7 +33,7 @@ public class ResourceReaderController {
      * @return Data Transfer Object which depicts the specific {@link ItemDTO}.
      */
     @GetMapping("/result/{id}")
-    public ItemDTO getResultFromResourceById(@PathVariable String id) {
+    public Mono<SolrMessageDTO> getResultFromResourceById(@PathVariable String id) {
         return resourceReaderService.getResultFromResourceById(id);
     }
 
