@@ -12,4 +12,6 @@ public interface IResourceClient {
 
     Flux<SolrMessageDTO> getAllResultsFromResource(Integer page, Integer rows);
     Mono<SolrMessageDTO> getResultFromResourceById(String id);
+    Mono<SolrMessageDTO> getResultFromResourceByName(String name);
+
 }

@@ -37,4 +37,14 @@ public class ResourceReaderController {
         return resourceReaderService.getResultFromResourceById(id);
     }
 
+    /**
+     * Function to return an specific {@link ItemDTO} stored in
+     * the remote API resource.
+     * @param name the unique name which identifies an specific item.
+     * @return Data Transfer Object which depicts the specific {@link ItemDTO}.
+     */
+    @GetMapping("/result/name/{name}")
+    public Mono<SolrMessageDTO> getResultFromResourceByName(@PathVariable String name) {
+        return resourceReaderService.getResultFromResourceByName(name);
+    }
 }

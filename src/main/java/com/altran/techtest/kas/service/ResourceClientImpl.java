@@ -1,9 +1,7 @@
 package com.altran.techtest.kas.service;
 
 import com.altran.techtest.kas.dto.SolrMessageDTO;
-import com.altran.techtest.kas.exception.KasClientException;
-import com.altran.techtest.kas.exception.KasServerException;
-import com.altran.techtest.kas.exception.KasNoSuchItem;
+import com.altran.techtest.kas.exception.*;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -58,6 +56,23 @@ public class ResourceClientImpl implements IResourceClient {
                 .bodyToMono(SolrMessageDTO.class);
         if(solrMessageDTOMono.block().getResult().getCount() == 0)
             throw new KasNoSuchItem();
+        return solrMessageDTOMono;
+    }
+
+    @Override
+    public Mono<SolrMessageDTO> getResultFromResourceByName(String name) {
+        Mono<SolrMessageDTO> solrMessageDTOMono = this.webClient.get()
+                .uri(uriBuilder -> uriBuilder.path(RESOURCE_URI)
+                        .queryParam(QUERY_FILTER, "name:" + name)
+                        .build())
+                .retrieve()
+                .onStatus(HttpStatus::is4xxClientError, clientResponse ->
+                        Mono.error(new KasClientException()))
+                .onStatus(HttpStatus::is5xxServerError, clientResponse ->
+                        Mono.error(new KasServerException()))
+                .bodyToMono(SolrMessageDTO.class);
+        if(solrMessageDTOMono.block().getResult().getCount() == 0)
+            throw new KasNoSuchItemWithThisName();
         return solrMessageDTOMono;
     }
 
