@@ -2,8 +2,11 @@ package com.altran.techtest.kas.service;
 
 import com.altran.techtest.kas.dto.ItemDTO;
 import com.altran.techtest.kas.dto.SolrMessageDTO;
+import com.altran.techtest.kas.exception.KasNoSuchItem;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -41,11 +44,8 @@ public class ResourceClientImplTest {
         assertEquals(expectedResult.getId(), ID);
     }
 
-    @Test
+    @Test(expected=KasNoSuchItem.class)
     public void whenReadingFromResourceByIdThenNoMatches() throws Exception {
         Mono<SolrMessageDTO> solrMessage = this.resourceClient.getResultFromResourceById("madeUpValue");
-        assertNotNull(solrMessage.block());
-        List<ItemDTO> expectedResult = solrMessage.block().getResult().getResults();
-        assertTrue(expectedResult.isEmpty());
     }
 }

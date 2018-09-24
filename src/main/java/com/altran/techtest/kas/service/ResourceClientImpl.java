@@ -1,7 +1,11 @@
 package com.altran.techtest.kas.service;
 
 import com.altran.techtest.kas.dto.SolrMessageDTO;
+import com.altran.techtest.kas.exception.KasClientException;
+import com.altran.techtest.kas.exception.KasServerException;
+import com.altran.techtest.kas.exception.KasNoSuchItem;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -33,18 +37,28 @@ public class ResourceClientImpl implements IResourceClient {
                         .queryParam(ROWS, rows)
                         .build())
                 .retrieve()
+                .onStatus(HttpStatus::is4xxClientError, clientResponse ->
+                        Mono.error(new KasClientException()))
+                .onStatus(HttpStatus::is5xxServerError, clientResponse ->
+                        Mono.error(new KasServerException()))
                 .bodyToFlux(SolrMessageDTO.class);
     }
 
     @Override
     public Mono<SolrMessageDTO> getResultFromResourceById(String id) {
-        return this.webClient.get()
+        Mono<SolrMessageDTO> solrMessageDTOMono = this.webClient.get()
                 .uri(uriBuilder -> uriBuilder.path(RESOURCE_URI)
                         .queryParam(QUERY_FILTER, "id:" + id)
                         .build())
                 .retrieve()
+                .onStatus(HttpStatus::is4xxClientError, clientResponse ->
+                        Mono.error(new KasClientException()))
+                .onStatus(HttpStatus::is5xxServerError, clientResponse ->
+                        Mono.error(new KasServerException()))
                 .bodyToMono(SolrMessageDTO.class);
-        // TODO: Exception should not be two records with the same ID
+        if(solrMessageDTOMono.block().getResult().getCount() == 0)
+            throw new KasNoSuchItem();
+        return solrMessageDTOMono;
     }
 
 }

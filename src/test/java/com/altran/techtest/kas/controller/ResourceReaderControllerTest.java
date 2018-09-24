@@ -57,10 +57,7 @@ public class ResourceReaderControllerTest {
         webTestClient.get()
                 .uri("/kasapi/result/{id}", "madeUpId")
                 .exchange()
-                .expectStatus().isOk()
-                .expectBody()
-                .jsonPath("$.success").isEqualTo(true)
-                .jsonPath("$.result.results").isEmpty();
+                .expectStatus().isNotFound();
     }
 
 }
